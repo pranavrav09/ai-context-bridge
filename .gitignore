@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+backend/venv/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+backend/.env
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+backend/*.db
+
+# Service account keys (IMPORTANT - NEVER COMMIT THESE)
+*-key.json
+github-actions-key.json
+backend/github-actions-key.json
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+backend/logs/
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Alembic
+backend/alembic/versions/*.pyc
+
+# Node (if any)
+node_modules/
+
+# Cloud Build
+.gcloudignore
+
+# Extension development
+*.crx
+*.pem

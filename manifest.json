@@ -1,0 +1,50 @@
+{
+    "manifest_version": 3,
+    "name": "AI Context Bridge",
+    "version": "1.0.0",
+    "description": "Transfer conversation context between AI assistants",
+    "permissions": [
+      "activeTab",
+      "storage",
+      "clipboardWrite",
+      "contextMenus"
+    ],
+    "host_permissions": [
+      "https://chat.openai.com/*",
+      "https://chatgpt.com/*",
+      "https://claude.ai/*",
+      "https://gemini.google.com/*",
+      "https://poe.com/*",
+      "http://localhost:*/*",
+      "https://*.run.app/*"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": [
+          "https://chat.openai.com/*",
+          "https://chatgpt.com/*",
+          "https://claude.ai/*",
+          "https://gemini.google.com/*",
+          "https://poe.com/*"
+        ],
+        "js": ["content.js"],
+        "run_at": "document_idle"
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+      }
+    },
+    "icons": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  }
