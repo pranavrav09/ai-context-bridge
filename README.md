@@ -170,7 +170,7 @@ This project includes automated CI/CD with GitHub Actions.
 
 ### Quick Deploy to Google Cloud
 
-See [CI-CD-SETUP.md](CI-CD-SETUP.md) for comprehensive deployment guide.
+See [docs/deployment.md](docs/deployment.md) for comprehensive deployment guide.
 
 ```bash
 # 1. Set up GCP project
@@ -341,7 +341,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 For issues, questions, or suggestions:
 - Open an issue on GitHub
 - Check existing issues for solutions
-- Review the documentation in `backend/README.md` and `CI-CD-SETUP.md`
+- Review the documentation in `backend/README.md` and `docs/deployment.md`
 
 ---
 
