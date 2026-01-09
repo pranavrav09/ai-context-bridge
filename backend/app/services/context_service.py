@@ -62,11 +62,19 @@ async def create_context(db: AsyncSession, context_data: ContextCreate) -> Conte
 
     # Create messages
     for idx, msg in enumerate(context_data.messages):
+        # Normalize timestamp to timezone-naive UTC
+        # If timezone-aware, convert to UTC and remove tzinfo
+        # If timezone-naive, use as-is
+        timestamp = msg.timestamp
+        if timestamp.tzinfo is not None:
+            # Convert to UTC and strip timezone info
+            timestamp = timestamp.replace(tzinfo=None)
+
         message = Message(
             context_id=context.id,
             role=msg.role,
             content=msg.content,
-            message_timestamp=msg.timestamp,
+            message_timestamp=timestamp,
             sequence_order=idx,
         )
         db.add(message)
