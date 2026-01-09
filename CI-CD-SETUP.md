@@ -3,7 +3,6 @@
 ## Overview
 Automated deployment pipeline using GitHub Actions to deploy the FastAPI backend to Google Cloud Run whenever backend code changes.
 
-## What We Set Up
 
 ### 1. GitHub Repository
 - **Repository**: https://github.com/pranavrav09/ai-context-bridge
@@ -68,7 +67,7 @@ When code is pushed to the `main` branch:
 ## How to Use
 
 ### Automatic Deployment
-Simply push your backend changes to the `main` branch:
+push your backend changes to the `main` branch:
 
 ```bash
 # Make changes to backend files
@@ -129,7 +128,7 @@ git push origin main
 gh run watch
 ```
 
-The new version will be live in ~2-3 minutes!
+The new version will be live in ~2-3 minutes
 
 ### Example: Update Dependencies
 
