@@ -4,7 +4,7 @@ const API_CONFIG = {
   DEV_BASE_URL: "http://localhost:8000/api/v1",
 
   // Production (update this after deploying to Google Cloud)
-  PROD_BASE_URL: "https://ai-context-api-508048026030.us-central1.run.app/api/v1",
+  PROD_BASE_URL: "https://ai-context-api-elxaawma6a-uc.a.run.app/api/v1",
 
   // Get the appropriate base URL based on environment
   getBaseURL: function () {
