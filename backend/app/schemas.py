@@ -1,6 +1,7 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import List, Optional
 from datetime import datetime
+from app.config import settings
 
 
 class MessageCreate(BaseModel):
@@ -55,6 +56,17 @@ class ContextCreate(BaseModel):
         if len(v) == 0:
             raise ValueError("At least one message is required")
         return v
+
+    @model_validator(mode="after")
+    def validate_context_size(self):
+        total_chars = len(self.formatted) + sum(len(m.content) for m in self.messages)
+        if self.summary:
+            total_chars += len(self.summary)
+        if total_chars > settings.MAX_CONTEXT_SIZE:
+            raise ValueError(
+                f"Context too large: {total_chars} characters exceeds limit of {settings.MAX_CONTEXT_SIZE}"
+            )
+        return self
 
     model_config = {
         "json_schema_extra": {

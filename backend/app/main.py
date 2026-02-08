@@ -2,10 +2,18 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
+import asyncio
 
 from app.config import settings
 from app.database import engine, Base
 from app.api.routes import contexts, summarize, health
+from app.middleware.rate_limit import limiter
+from app.middleware.api_usage import APIUsageMiddleware
+from app.services.context_service import cleanup_expired_contexts
+from app.database import AsyncSessionLocal
+from slowapi.errors import RateLimitExceeded
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.middleware import SlowAPIMiddleware
 
 # Configure logging
 logging.basicConfig(
@@ -26,9 +34,18 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
     logger.info("Database tables created/verified")
 
+    # Start background cleanup task
+    cleanup_task = asyncio.create_task(_cleanup_loop())
+
     yield
 
     # Shutdown: cleanup if needed
+    cleanup_task.cancel()
+    try:
+        await cleanup_task
+    except asyncio.CancelledError:
+        pass
+
     logger.info("Shutting down AI Context Bridge API...")
     await engine.dispose()
     logger.info("Database connections closed")
@@ -42,6 +59,14 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+# Rate limiting
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
+
+# API usage logging
+app.add_middleware(APIUsageMiddleware)
 
 # CORS Configuration
 app.add_middleware(
@@ -57,6 +82,19 @@ app.add_middleware(
 app.include_router(health.router, prefix="/api/v1", tags=["Health"])
 app.include_router(contexts.router, prefix="/api/v1", tags=["Contexts"])
 app.include_router(summarize.router, prefix="/api/v1", tags=["Summarization"])
+
+
+async def _cleanup_loop():
+    """
+    Periodically delete expired contexts.
+    """
+    while True:
+        try:
+            async with AsyncSessionLocal() as session:
+                await cleanup_expired_contexts(session)
+        except Exception as e:
+            logger.error(f"Expiration cleanup failed: {e}")
+        await asyncio.sleep(settings.CLEANUP_INTERVAL_SECONDS)
 
 
 @app.get("/")

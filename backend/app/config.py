@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     RATE_LIMIT_REQUESTS: int = 100
     RATE_LIMIT_WINDOW: int = 3600  # 1 hour in seconds
 
+    # Expiration cleanup
+    CLEANUP_INTERVAL_SECONDS: int = 3600
+
     # Server
     PORT: int = 8000
     WORKERS: int = 4

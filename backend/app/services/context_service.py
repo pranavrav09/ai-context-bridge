@@ -8,6 +8,7 @@ import logging
 from app.models import Context, Message
 from app.schemas import ContextCreate
 from app.services.openai_service import generate_summary
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +33,9 @@ async def create_context(db: AsyncSession, context_data: ContextCreate) -> Conte
 
     if context_data.generate_ai_summary:
         try:
-            ai_result = await generate_summary(context_data.messages)
+            ai_result = await generate_summary(
+                context_data.messages, max_tokens=settings.OPENAI_MAX_TOKENS
+            )
             summary = ai_result["summary"]
             ai_summary_metadata = {
                 "tokens_used": ai_result["tokens_used"],
