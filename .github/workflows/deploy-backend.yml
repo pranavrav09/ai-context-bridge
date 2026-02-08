@@ -64,7 +64,7 @@ jobs:
             --allow-unauthenticated \
             --add-cloudsql-instances ${{ env.PROJECT_ID }}:${{ env.REGION }}:ai-context-db \
             --set-secrets DATABASE_URL=database-url:latest,OPENAI_API_KEY=openai-api-key:latest \
-            --set-env-vars ENV=production,CORS_ORIGINS='["*"]' \
+            --set-env-vars ENV=production,CORS_ORIGINS='["chrome-extension://*","http://localhost","http://localhost:*"]' \
             --memory 512Mi \
             --cpu 1 \
             --min-instances 0 \
