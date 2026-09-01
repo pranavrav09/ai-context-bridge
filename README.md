@@ -345,4 +345,4 @@ For issues, questions, or suggestions:
 
 ---
 
-**Made with ❤️ for seamless AI conversations across platforms**
+**Made for seamless AI conversations across platforms**
